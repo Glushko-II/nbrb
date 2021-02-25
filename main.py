@@ -1,12 +1,12 @@
 import requests
+import xlrd
 
 
 def get_currencies_iso():
-    import xlrd
     try:
         book = xlrd.open_workbook("list_of_currencies.xls")
-    except FileNotFoundError:
-        return None
+    except FileNotFoundError as ex:
+        print(f"File not found: {ex}")
     else:
         sh = book.sheet_by_index(0)
         return sh.col_values(colx=2, start_rowx=4, end_rowx=280)
