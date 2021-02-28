@@ -23,14 +23,16 @@ def get_correct_currency():
     return currency_name
 
 
-def get_url():
+def get_url(url: str):
     pass
 
 
-currency = get_correct_currency()
 
+currency = get_correct_currency()
 url = f"https://www.nbrb.by/api/exrates/rates/{currency}?parammode=2"
+
 r = requests.get(url)
 currency_rate = r.json()
 
 print(f"\n{currency_rate['Cur_OfficialRate']}BYN as of {currency_rate['Date']}")
+
