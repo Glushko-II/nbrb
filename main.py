@@ -2,6 +2,10 @@ import requests
 import xlrd
 
 
+class MyError(Exception):
+    pass
+
+
 def get_currencies_iso():
     try:
         book = xlrd.open_workbook("list_of_currencies.xls")
@@ -24,15 +28,23 @@ def get_correct_currency():
 
 
 def get_url(url: str):
-    pass
+    try:
+        if requests.get(url).status_code != 200:
+            raise MyError()
+    except MyError:
+        print(f"Unsuccessful response on request")
+    else:
+        return requests.get(url).json()
+
+
+def print_response(currency_rate: dict):
+    try:
+        print(f"\n{currency_rate['Cur_OfficialRate']}BYN as of {currency_rate['Date']}")
+    except TypeError:
+        pass
 
 
 
 currency = get_correct_currency()
 url = f"https://www.nbrb.by/api/exrates/rates/{currency}?parammode=2"
-
-r = requests.get(url)
-currency_rate = r.json()
-
-print(f"\n{currency_rate['Cur_OfficialRate']}BYN as of {currency_rate['Date']}")
-
+print_response(get_url(url))
