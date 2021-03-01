@@ -27,14 +27,15 @@ def get_correct_currency():
     return currency_name
 
 
-def get_url(url: str):
+def fetch_data(url: str):
+    response = requests.get(url)
     try:
-        if requests.get(url).status_code != 200:
+        if response.status_code != 200:
             raise MyError()
     except MyError:
         print(f"Unsuccessful response on request")
     else:
-        return requests.get(url).json()
+        return response.json()
 
 
 def print_response(currency_rate: dict):
@@ -47,4 +48,4 @@ def print_response(currency_rate: dict):
 
 currency = get_correct_currency()
 url = f"https://www.nbrb.by/api/exrates/rates/{currency}?parammode=2"
-print_response(get_url(url))
+print_response(fetch_data(url))
