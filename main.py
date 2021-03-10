@@ -2,10 +2,6 @@ import requests
 import xlrd
 
 
-class MyError(Exception):
-    pass
-
-
 def get_currencies_iso():
     try:
         book = xlrd.open_workbook("list_of_currencies.xls")
@@ -29,10 +25,7 @@ def get_correct_currency():
 
 def fetch_data(url: str):
     response = requests.get(url)
-    try:
-        if response.status_code != 200:
-            raise MyError()
-    except MyError:
+    if response.status_code != 200:
         print(f"Unsuccessful response on request")
     else:
         return response.json()
