@@ -1,6 +1,6 @@
 import requests
 import xlrd
-import logging
+import logger as log
 
 
 def get_currencies_iso():
@@ -26,14 +26,9 @@ def get_correct_currency():
 
 def fetch_data(url: str):
     response = requests.get(url)
-    logger = logging.getLogger("nbrb_log")
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.ERROR)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+
     if response.status_code != 200:
-        logger.error(f"Unsuccessful response on request")
+        log.logger.error("Unsuccessful response on request")
     else:
         return response.json()
 
