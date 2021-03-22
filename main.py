@@ -1,9 +1,6 @@
 import requests
 import xlrd
-
-
-class MyError(Exception):
-    pass
+import logger as log
 
 
 def get_currencies_iso():
@@ -29,11 +26,9 @@ def get_correct_currency():
 
 def fetch_data(url: str):
     response = requests.get(url)
-    try:
-        if response.status_code != 200:
-            raise MyError()
-    except MyError:
-        print(f"Unsuccessful response on request")
+
+    if response.status_code != 200:
+        log.logger.error("Unsuccessful response on request")
     else:
         return response.json()
 
@@ -43,7 +38,6 @@ def print_response(currency_rate: dict):
         print(f"\n{currency_rate['Cur_OfficialRate']}BYN as of {currency_rate['Date']}")
     except TypeError:
         pass
-
 
 
 currency = get_correct_currency()
